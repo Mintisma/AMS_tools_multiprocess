@@ -1,13 +1,9 @@
 from spyre import server
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 
-import UK_page_scraping
-import DE_page_scraping
-import JP_page_scraping
-import US_page_scraping
-import US_top100, UK_top100, DE_top100, JP_top100
+import UK_page_scraping, DE_page_scraping, JP_page_scraping, US_page_scraping, FR_page_scraping, IT_page_scraping
+import US_top100, UK_top100, DE_top100, JP_top100, FR_top100, IT_top100
 
 
 class AmsInteract(server.App):
@@ -17,7 +13,9 @@ class AmsInteract(server.App):
         {'label': 'US', 'value': 'US'},
         {'label': 'UK', 'value': 'UK'},
         {'label': 'DE', 'value': 'DE'},
-        {'label': 'JP', 'value': 'JP'}
+        {'label': 'JP', 'value': 'JP'},
+        {'label': 'FR', 'value': 'FR'},
+        {'label': 'IT', 'value': 'IT'},
     ]
     inputs = [
             {
@@ -132,6 +130,10 @@ class AmsInteract(server.App):
                 lst = DE_page_scraping.ams_scrape(search, page, price_min, price_max)
             elif country == 'JP':
                 lst = JP_page_scraping.ams_scrape(search, page, price_min, price_max)
+            elif country == 'FR':
+                lst = FR_page_scraping.ams_scrape(search, page, price_min, price_max)
+            elif country == 'IT':
+                lst = IT_page_scraping.ams_scrape(search, page, price_min, price_max)
         elif top100_index != '':
             if country == 'US':
                 lst = US_top100.ams_scrape(top100_index)
@@ -141,10 +143,13 @@ class AmsInteract(server.App):
                 lst = DE_top100.ams_scrape(top100_index)
             elif country == 'JP':
                 lst = JP_top100.ams_scrape(top100_index)
+            elif country == 'FR':
+                lst = FR_top100.ams_scrape(top100_index)
+            elif country == 'IT':
+                lst = IT_top100.ams_scrape(top100_index)
 
         # transform list to DataFrame
         if len(lst) > 0:
-            #df = pd.DataFrame(lst)
             d = {}
             for i in range(len(lst)):
                 d[i] = pd.DataFrame(lst[i])
