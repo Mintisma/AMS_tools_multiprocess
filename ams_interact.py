@@ -1,6 +1,7 @@
 from spyre import server
 import pandas as pd
 import matplotlib.pyplot as plt
+import time
 
 import UK_page_scraping, DE_page_scraping, JP_page_scraping, US_page_scraping, FR_page_scraping, IT_page_scraping
 import US_top100, UK_top100, DE_top100, JP_top100, FR_top100, IT_top100
@@ -147,46 +148,48 @@ class AmsInteract(server.App):
                 lst = FR_top100.ams_scrape(top100_index)
             elif country == 'IT':
                 lst = IT_top100.ams_scrape(top100_index)
-
         # transform list to DataFrame
-        if len(lst) > 0:
-            d = {}
-            for i in range(len(lst)):
-                d[i] = pd.DataFrame(lst[i])
-            df = pd.concat([d[i] for i in range(len(d))])
+        if 'lst' in locals():
+            if len(lst) > 0:
+                d = {}
+                for i in range(len(lst)):
+                    d[i] = pd.DataFrame(lst[i])
+                df = pd.concat([d[i] for i in range(len(d))])
 
-            df.drop_duplicates('asin', inplace=True)
-            df = df[df.asin!='unknown']
-            df = df[(~df.title.str.contains('Inateck')) & (~df.title.str.contains('Tomons')) & (~df.title.str.contains('Tomtoc'))]
+                df.drop_duplicates('asin', inplace=True)
+                df = df[df.asin!='unknown']
+                df = df[(~df.title.str.contains('Inateck')) & (~df.title.str.contains('Tomons')) & (~df.title.str.contains('Tomtoc'))]
 
-            # contains
-            if title_contains[0] != '':
-                for title_contain in title_contains:
-                    df = df[(df.title.str.contains(title_contain))]
-            if title_notContains[0] != '':
-                for title_notContain in title_notContains:
-                    df = df[(~df.title.str.contains(title_notContain))]
-            if brand != '':
-                df = df[df.brand.str.contains(brand)]
-            # # price
-            df = df[(df.price>=price_min) & (df.price<=price_max)]
-            return df
+                # contains
+                if title_contains[0] != '':
+                    for title_contain in title_contains:
+                        df = df[(df.title.str.contains(title_contain))]
+                if title_notContains[0] != '':
+                    for title_notContain in title_notContains:
+                        df = df[(~df.title.str.contains(title_notContain))]
+                if brand != '':
+                    df = df[df.brand.str.contains(brand)]
+                # # price
+                df = df[(df.price>=price_min) & (df.price<=price_max)]
+                return df
 
     def getPlot(self, params):
-        df = self.getData(params)
         fig = plt.figure()  # make figure object
         splt = fig.add_subplot(1, 1, 1)
         splt.set_xlabel('price')
         splt.set_ylabel('number')
-        splt.hist(df.price, bins=10)
-        return splt
+        df = self.getData(params) # get data
+        if not df is None:
+            splt.hist(df.price, bins=10)
+            return splt
 
     def getHTML(self, params):
         df = self.getData(params)
-        Asins = '|'.join(list(df.asin))
-        info = '<b>The Asins we want are: <b> <br><br> {} <br><br> \
-            The total Asins number are: <br> {}'.format(Asins, df.shape[0])
-        return info
+        if not df is None:
+            Asins = '|'.join(list(df.asin))
+            info = '<b>The Asins we want are: <b> <br><br> {} <br><br> \
+                The total Asins number are: <br> {}'.format(Asins, df.shape[0])
+            return info
 
 app = AmsInteract()
 app.launch(host='0.0.0.0',port=8001)
