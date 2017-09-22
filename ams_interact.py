@@ -173,6 +173,7 @@ class AmsInteract(server.App):
                 df = df[(df.price>=price_min) & (df.price<=price_max)]
                 return df
 
+
     def getPlot(self, params):
         fig = plt.figure()  # make figure object
         splt = fig.add_subplot(1, 1, 1)

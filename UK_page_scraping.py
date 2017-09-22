@@ -82,7 +82,7 @@ def ams_scrape(search_text, num, low_price, high_price):
         info_lst.append(info)
 
     # 完成抓取，得到list对象
-    pool = Pool()
+    pool = Pool(4)
     temp = []
     lst = []
     for info in info_lst:
