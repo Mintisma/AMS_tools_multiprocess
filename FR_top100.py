@@ -5,11 +5,11 @@ def get_top100(index, num):
 
     def price_get(sku):
         try:
-            float(sku.parent.select('span.a-size-base')[0].get_text().replace('EUR ', '').replace(',', '.'))
+            float(sku.parent.select('span.a-size-base')[0].get_text().replace('EUR ', '').replace(' ','').replace(',', '.'))
         except Exception as err:
             r = 0
         else:
-            r = float(sku.parent.select('span.a-size-base')[0].get_text().replace('EUR ', '').replace(',', '.'))
+            r = float(sku.parent.select('span.a-size-base')[0].get_text().replace('EUR ', '').replace(' ','').replace(',', '.'))
         return r
 
     def star_get(sku):

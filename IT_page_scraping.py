@@ -5,11 +5,11 @@ def ams_data(search_text, num, low_price='', high_price=''):
 
     def price_get(sku):
         try:
-            float(sku.parent.parent.parent.next_sibling.find('span', {'class': 'a-size-base'}).get_text().split()[-1].replace(',', '.'))
+            float(sku.parent.parent.parent.next_sibling.find('span', {'class': 'a-size-base'}).get_text().split()[-1].replace('.','').replace(',', '.'))
         except Exception as err:
             r = 0
         else:
-            r = float(sku.parent.parent.parent.next_sibling.find('span', {'class': 'a-size-base'}).get_text().split()[-1].replace(',', '.'))
+            r = float(sku.parent.parent.parent.next_sibling.find('span', {'class': 'a-size-base'}).get_text().split()[-1].replace('.','').replace(',', '.'))
         return r
 
     def asin_get(sku):

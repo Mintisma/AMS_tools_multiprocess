@@ -94,19 +94,22 @@ class AmsInteract(server.App):
             'type': 'plot',
             'id': 'plot',
             'control_id': 'update_search',
-            'tab': 'Plot'
+            'tab': 'Plot',
+            'on_page_load': True,
     },
         {
             'type': 'table',
             'id': 'table',
             'control_id': 'update_search',
-            'tab': 'Table'
+            'tab': 'Table',
+            'on_page_load': True,
     },
         {
             'type': 'html',
             'id': 'html',
             'tab': 'ASINS',
             'control_id': 'update_search',
+            'on_page_load': True,
     }
     ]
 
@@ -172,7 +175,6 @@ class AmsInteract(server.App):
                 # # price
                 df = df[(df.price>=price_min) & (df.price<=price_max)]
                 return df
-
 
     def getPlot(self, params):
         fig = plt.figure()  # make figure object
