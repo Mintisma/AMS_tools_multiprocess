@@ -1,7 +1,10 @@
+import requests
+from bs4 import BeautifulSoup
+import time
+
+s = requests.session()
+
 def ams_data(search_text, num, low_price='', high_price=''):
-    import requests
-    from bs4 import BeautifulSoup
-    import time
 
     def price_get(sku):
         try:
@@ -68,7 +71,7 @@ def ams_data(search_text, num, low_price='', high_price=''):
     url = url.format(num, low_price, high_price)
     lst = []
     time.sleep(1)
-    wb_data = requests.get(url, headers=headers)
+    wb_data = s.get(url, headers=headers)
     bsObj = BeautifulSoup(wb_data.text, 'lxml')
     skus = bsObj.findAll('h2', {'class': 'a-size-medium'})
     for sku in skus:

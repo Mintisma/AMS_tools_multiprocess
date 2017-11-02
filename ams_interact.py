@@ -1,7 +1,7 @@
 from spyre import server
 import pandas as pd
 import matplotlib.pyplot as plt
-import time
+import seaborn as sns
 
 import UK_page_scraping, DE_page_scraping, JP_page_scraping, US_page_scraping, FR_page_scraping, IT_page_scraping
 import US_top100, UK_top100, DE_top100, JP_top100, FR_top100, IT_top100
@@ -18,64 +18,77 @@ class AmsInteract(server.App):
         {'label': 'FR', 'value': 'FR'},
         {'label': 'IT', 'value': 'IT'},
     ]
+
+    plotParams = [
+        {'label': 'review', 'value': 'review'},
+        {'label': 'price', 'value': 'price'},
+        {'label': 'star', 'value': 'star'},
+    ]
+
     inputs = [
             {
                 'type': 'dropdown',
-                'label': 'Country',
+                'label': 'country',
                 'options': countries,
                 'key': 'country',
-                'action_id': 'update_search',
+                #'action_id': 'update_search',
         },
             {
                 'type': 'text',
                 'label': 'top100_index',
                 'key': 'top100_index',
-                'action_id': 'update_search',
+                #'action_id': 'update_search',
         },
             {
                 'type': 'text',
                 'key': 'search',
                 'label': 'search term',
-                'action_id': 'update_search'
+                #'action_id': 'update_search'
         },
             {
                 'type': 'slider',
                 'label': 'number of pages',
                 "min": 2, "max": 10, "value": 2,
                 'key': 'page',
-                'action_id': 'update_search'
+                #'action_id': 'update_search'
         },
             {
                 'type': 'text',
                 'label': 'title_contains',
                 'key': 'title_contains',
-                'action_id': 'update_search'
+                #'action_id': 'update_search'
         },
             {
                 'type': 'text',
                 'label': 'title_notContains',
                 'key': 'title_notContains',
-                'action_id': 'update_search'
+                #'action_id': 'update_search'
         },
             {
                 'type': 'text',
                 'label': 'brand',
                 'key': 'brand',
-                'action_id': 'update_search'
+                #'action_id': 'update_search'
         },
             {
                 'type': 'slider',
                 'label': 'minimum price',
                 'key': 'price_min',
-                'action_id': 'update_search',
+                #'action_id': 'update_search',
                 "min": 0, "max": 4000, "value": 0
         },
             {
                 'type': 'slider',
                 'label': 'max price',
                 'key': 'price_max',
-                'action_id': 'update_search',
+                #'action_id': 'update_search',
                 "min": 1, "max": 200000, "value": 10
+        },
+            {
+                'type': 'dropdown',
+                'label': 'plot_param',
+                'key': 'plot_param',
+                'options': plotParams,
         }
     ]
 
@@ -161,7 +174,7 @@ class AmsInteract(server.App):
 
                 df.drop_duplicates('asin', inplace=True)
                 df = df[df.asin!='unknown']
-                df = df[(~df.title.str.contains('Inateck')) & (~df.title.str.contains('Tomons')) & (~df.title.str.contains('Tomtoc'))]
+                #df = df[(~df.title.str.contains('Inateck')) & (~df.title.str.contains('Tomons')) & (~df.title.str.contains('Tomtoc'))]
 
                 # contains
                 if title_contains[0] != '':
@@ -177,13 +190,24 @@ class AmsInteract(server.App):
                 return df
 
     def getPlot(self, params):
-        fig = plt.figure()  # make figure object
-        splt = fig.add_subplot(1, 1, 1)
-        splt.set_xlabel('price')
-        splt.set_ylabel('number')
+        plotKind = params['plot_param']
+        # fig = plt.figure()  # make figure object
+        # splt = fig.add_subplot(1, 1, 1)
+        #splt.set_ylabel('number')
         df = self.getData(params) # get data
         if not df is None:
-            splt.hist(df.price, bins=10)
+            if plotKind == 'price':
+                splt = sns.distplot(df.price)
+                # splt.set_xlabel('price')
+                # splt.hist(df.price, bins=10)
+            elif plotKind == 'review':
+                splt = sns.distplot(df.review)
+                # splt.set_xlabel('review')
+                # splt.hist(df.review, bins=20)
+            elif plotKind == 'star':
+                splt = sns.distplot(df.star)
+                # splt.set_xlabel('star')
+                # splt.hist(df.star, bins=10)
             return splt
 
     def getHTML(self, params):

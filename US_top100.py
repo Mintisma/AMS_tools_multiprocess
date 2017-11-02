@@ -1,8 +1,10 @@
-def get_top100(index, num):
-    import requests
-    from bs4 import BeautifulSoup
-    import time
+import requests
+from bs4 import BeautifulSoup
+import time
 
+s = requests.session()
+
+def get_top100(index, num):
     def price_get(sku):
         try:
             float(sku.parent.select('span.a-size-base')[0].get_text().replace('$', ''))
@@ -44,7 +46,7 @@ def get_top100(index, num):
 
     lst = []
     time.sleep(1)
-    wb_data = requests.get(url, headers=headers)
+    wb_data = s.get(url, headers=headers)
     soup = BeautifulSoup(wb_data.text, 'lxml')
     skus = soup.select('div.zg_rankDiv')
     for sku in skus:
