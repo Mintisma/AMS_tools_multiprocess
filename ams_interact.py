@@ -98,7 +98,12 @@ class AmsInteract(server.App):
             'type': 'button',
             'label': 'Search',
             'id': 'update_search'
-    }
+    },
+        {
+            'type': 'button',
+            'label': 'Download',
+            'id': 'download',
+        }
     ]
 
     tabs = ['Plot', 'Table', 'ASINS']
@@ -124,7 +129,13 @@ class AmsInteract(server.App):
             'tab': 'ASINS',
             'control_id': 'update_search',
             'on_page_load': True,
-    }
+    },
+        {
+            'type': 'download',
+            'id': 'download',
+            'control_id': 'download',
+            'on_page_load': False,
+        }
     ]
 
     def getData(self, params):
