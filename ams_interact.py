@@ -2,6 +2,7 @@ from spyre import server
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
 import UK_page_scraping, DE_page_scraping, JP_page_scraping, US_page_scraping, FR_page_scraping, IT_page_scraping
 import US_top100, UK_top100, DE_top100, JP_top100, FR_top100, IT_top100
@@ -217,6 +218,6 @@ class AmsInteract(server.App):
             info = '<b>The Asins we want are: <b> <br><br> {} <br><br> \
                 The total Asins number are: <br> {}'.format(Asins, df.shape[0])
             return info
-
-app = AmsInteract()
-app.launch(host='0.0.0.0',port=8001)
+if __name__ == '__main__':
+    app = AmsInteract()
+    app.launch(host='0.0.0.0', port=int(os.environ.get('PORT', '5000')))
