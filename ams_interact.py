@@ -203,32 +203,32 @@ class AmsInteract(server.App):
 
     def getPlot(self, params):
         plotKind = params['plot_param']
-        # fig = plt.figure()  # make figure object
-        # splt = fig.add_subplot(1, 1, 1)
-        #splt.set_ylabel('number')
+        fig = plt.figure()  # make figure object
+        splt = fig.add_subplot(1, 1, 1)
+        splt.set_ylabel('number')
         df = self.getData(params) # get data
         if not df is None:
             if plotKind == 'price':
-                splt = sns.distplot(df.price)
-                # splt.set_xlabel('price')
-                # splt.hist(df.price, bins=10)
+             #   splt = sns.distplot(df.price)
+                splt.set_xlabel('price')
+                splt.hist(df.price, bins=10)
             elif plotKind == 'review':
-                splt = sns.distplot(df.review)
-                # splt.set_xlabel('review')
-                # splt.hist(df.review, bins=20)
+                #splt = sns.distplot(df.review)
+                splt.set_xlabel('review')
+                splt.hist(df.review, bins=20)
             elif plotKind == 'star':
-                splt = sns.distplot(df.star)
-                # splt.set_xlabel('star')
-                # splt.hist(df.star, bins=10)
+                #splt = sns.distplot(df.star)
+                splt.set_xlabel('star')
+                splt.hist(df.star, bins=10)
             return splt
 
     def getHTML(self, params):
         df = self.getData(params)
         if not df is None:
-            Asins = '|'.join(list(df.asin))
+            Asins = ','.join(list(df.asin))
             info = '<b>The Asins we want are: <b> <br><br> {} <br><br> \
                 The total Asins number are: <br> {}'.format(Asins, df.shape[0])
             return info
 if __name__ == '__main__':
     app = AmsInteract()
-    app.launch(host='0.0.0.0', port=int(os.environ.get('PORT', '5000')))
+    app.launch(host='0.0.0.0', port=int(os.environ.get('PORT', '1000')))

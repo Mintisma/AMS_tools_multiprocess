@@ -1,7 +1,0 @@
-pandas
-matplotlib
-seaborn
-requests
-bs4
-DataSpyre
-lxml
